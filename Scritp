@@ -1,0 +1,61 @@
+setDefaultTab("Tools")
+
+local autopartyui = setupUI([[
+Panel
+  height: 38
+
+  Button
+    id: editPlayerList
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-left: 3
+    height: 18
+    text: Setup
+]], parent)
+
+g_ui.loadUIFromString([[
+AutoPartyListWindow < MainWindow
+  text: Ciudades
+  size: 200 315
+
+  HorizontalSeparator
+    id: separator
+    anchors.right: parent.right
+    anchors.left: parent.left
+    anchors.bottom: closeButton.top
+    margin-bottom: 6
+
+  Button
+    id: closeButton
+    text: Close
+    font: cipsoftFont
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    size: 45 21
+]])
+
+local panelName = "autoParty"
+if not storage[panelName] then
+  storage[panelName] = {
+    enabled = false,
+  }
+end
+
+local config = storage[panelName]
+
+rootWidget = g_ui.getRootWidget()
+if rootWidget then
+  autoPartyListWindow = UI.createWindow('AutoPartyListWindow', rootWidget)
+  autoPartyListWindow:hide()
+
+  autopartyui.editPlayerList.onClick = function(widget)
+    autoPartyListWindow:show()
+    autoPartyListWindow:raise()
+    autoPartyListWindow:focus()
+  end
+
+  autoPartyListWindow.closeButton.onClick = function(widget)
+    autoPartyListWindow:hide()
+  end
+end
